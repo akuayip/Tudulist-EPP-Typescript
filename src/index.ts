@@ -4,14 +4,28 @@ interface Task {
     completed: boolean;
 }
 
-const taskInput = document.getElementById("taskInput") as HTMLInputElement;
-const addTaskButton = document.getElementById("addTaskBtn") as HTMLButtonElement;
-const taskList = document.getElementById("taskList") as HTMLUListElement;
-const filterSelect = document.getElementById("filterSelect") as HTMLSelectElement;
+// Fungsi untuk mendapatkan elemen dari DOM
+function getElementById<T extends HTMLElement>(id: string): T {
+    const element = document.getElementById(id);
+    if (!element) throw new Error(`Element with id ${id} not found`);
+    return element as T;
+}
 
-let tasks: Task[] = JSON.parse(localStorage.getItem("tasks") || '[]');
+// Mengambil elemen DOM
+const taskInput = getElementById<HTMLInputElement>("taskInput");
+const addTaskButton = getElementById<HTMLButtonElement>("addTaskBtn");
+const taskList = getElementById<HTMLUListElement>("taskList");
+const filterSelect = getElementById<HTMLSelectElement>("filterSelect");
 
-const renderTasks = () => {
+// Mendapatkan tasks dari localStorage atau menginisialisasi sebagai array kosong
+function getTasks(): Task[] {
+    return JSON.parse(localStorage.getItem("tasks") || '[]');
+}
+
+let tasks: Task[] = getTasks();
+
+// Render tasks ke dalam DOM
+function renderTasks(): void {
     taskList.innerHTML = "";
 
     const filter = filterSelect.value;
@@ -55,13 +69,15 @@ const renderTasks = () => {
     });
 }
 
-const toggleCompleted = (index: number) => {
+// Toggle status completed dari task
+function toggleCompleted(index: number): void {
     tasks[index].completed = !tasks[index].completed;
     saveTasks();
     renderTasks();
 }
 
-const addTask = () => {
+// Menambahkan task baru
+function addTask(): void {
     const taskText = taskInput.value.trim();
     if (taskText !== "") {
         tasks.push({ text: taskText, completed: false });
@@ -71,13 +87,15 @@ const addTask = () => {
     }
 }
 
-const deleteTask = (index: number) => {
+// Menghapus task
+function deleteTask(index: number): void {
     tasks.splice(index, 1);
     saveTasks();
     renderTasks();
 }
 
-const editTask = (index: number) => {
+// Mengedit task
+function editTask(index: number): void {
     const newText = prompt("Edit task", tasks[index].text);
     if (newText !== null && newText.trim() !== "") {
         tasks[index].text = newText;
@@ -86,14 +104,26 @@ const editTask = (index: number) => {
     }
 }
 
-const saveTasks = () => {
+// Menyimpan tasks ke dalam localStorage
+function saveTasks(): void {
     localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
-addTaskButton.addEventListener("click", addTask);
-taskInput.addEventListener("keypress", (event) => {
-    if (event.key === "Enter") addTask();
-});
-filterSelect.addEventListener("change", renderTasks);
+// Menambahkan event listener ke tombol dan input
+function addEventListeners(): void {
+    addTaskButton.addEventListener("click", addTask);
+    taskInput.addEventListener("keypress", (event) => {
+        if (event.key === "Enter") addTask();
+    });
+    filterSelect.addEventListener("change", renderTasks);
+}
 
-renderTasks();
+// Inisialisasi aplikasi
+function init(): void {
+    tasks = getTasks();
+    addEventListeners();
+    renderTasks();
+}
+
+// Memulai aplikasi
+init();
