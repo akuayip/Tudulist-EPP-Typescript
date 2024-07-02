@@ -1,3 +1,4 @@
+// Mendefinisikan tipe untuk task
 interface Task {
     text: string;
     completed: boolean;
@@ -8,14 +9,21 @@ const addTaskButton = document.getElementById("addTaskBtn") as HTMLButtonElement
 const taskList = document.getElementById("taskList") as HTMLUListElement;
 const filterSelect = document.getElementById("filterSelect") as HTMLSelectElement;
 
-let tasks: Task[] = JSON.parse(localStorage.getItem("tasks") || null) || '[]';
+let tasks: Task[] = JSON.parse(localStorage.getItem("tasks") || '[]');
 
 const renderTasks = () => {
     taskList.innerHTML = "";
 
     const filter = filterSelect.value;
+    let filteredTasks: Task[] = [];
 
-    const filteredTasks = filter === "all" ? tasks : filter === "complete" ? tasks.filter(task => task.completed) : tasks.filter(task => !task.completed);
+    if (filter === "all") {
+        filteredTasks = tasks;
+    } else if (filter === "complete") {
+        filteredTasks = tasks.filter(task => task.completed);
+    } else {
+        filteredTasks = tasks.filter(task => !task.completed);
+    }
 
     filteredTasks.forEach((task, index) => {
         const li = document.createElement("li");
@@ -71,7 +79,7 @@ const deleteTask = (index: number) => {
 
 const editTask = (index: number) => {
     const newText = prompt("Edit task", tasks[index].text);
-    if (newText !== null && newText.trim() !== ""){
+    if (newText !== null && newText.trim() !== "") {
         tasks[index].text = newText;
         saveTasks();
         renderTasks();
