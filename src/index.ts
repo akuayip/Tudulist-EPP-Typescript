@@ -9,7 +9,7 @@ const addTaskButton = document.getElementById("addTaskBtn") as HTMLButtonElement
 const taskList = document.getElementById("taskList") as HTMLUListElement;
 const filterSelect = document.getElementById("filterSelect") as HTMLSelectElement;
 
-let tasks: Task[] = JSON.parse(localStorage.getItem("tasks") || '[]');
+let tasks: Task[] = JSON.parse(localStorage.getItem("tasks") || null) || '[]';
 
 const renderTasks = () => {
     taskList.innerHTML = "";
@@ -53,15 +53,15 @@ const renderTasks = () => {
         li.appendChild(statusContainer);
         taskList.appendChild(li);
     });
-}
+};
 
-const toggleCompleted = (index: number) => {
+const toggleCompleted = (index: number): void => {
     tasks[index].completed = !tasks[index].completed;
     saveTasks();
     renderTasks();
-}
+};
 
-const addTask = () => {
+const addTask = (): void => {
     const taskText = taskInput.value.trim();
     if (taskText !== "") {
         tasks.push({ text: taskText, completed: false });
@@ -69,26 +69,26 @@ const addTask = () => {
         saveTasks();
         renderTasks();
     }
-}
+};
 
-const deleteTask = (index: number) => {
+const deleteTask = (index: number): void => {
     tasks.splice(index, 1);
     saveTasks();
     renderTasks();
-}
+};
 
-const editTask = (index: number) => {
+const editTask = (index: number): void => {
     const newText = prompt("Edit task", tasks[index].text);
     if (newText !== null && newText.trim() !== "") {
         tasks[index].text = newText;
         saveTasks();
         renderTasks();
     }
-}
+};
 
-const saveTasks = () => {
+const saveTasks = (): void => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
-}
+};
 
 addTaskButton.addEventListener("click", addTask);
 taskInput.addEventListener("keypress", (event) => {
