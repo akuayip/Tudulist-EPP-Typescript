@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tudu List Epp</title>
+    <link rel="stylesheet" href="style.css">  
+</head>
+<body>
+    <div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+     </div>
+    <h1>TuduList Epp</h1>
+    <!-- form container -->
+     <form class="form-container">
+        <input type="text" id="taskInput" placeholder="Tambahkan Tugas Baru...">
+        <button id="addTaskBtn">Tambah</button>
+     </form>
+    
+     <!-- filter -->
+      <div class="filter-container">
+        <label for="filters" style="font-size: large; font-weight: 600; text-align: center;">Filter</label>
+        <select class="option-container" id="filterSelect">
+            <option value="all">Semua</option>
+            <option value="complete">Selesai</option>
+            <option value="incomplate">Belum Selesai</option>
+        </select>
+      </div>
+
+
+      <h2>DAFTAR TUGAS</h2>
+      <!-- task list -->
+      <ul class="task-container" id="taskList">
+        <!-- rendering task -->
+      </ul>
+      <script src="../dist/index.js" type="module"></script>
+</body>
+</html>
